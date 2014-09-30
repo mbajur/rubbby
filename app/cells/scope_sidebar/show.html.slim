@@ -1,0 +1,12 @@
+ul.list-unstyled
+  li class=current_class_for(:hot)
+    = link_to 'Hot projects', controller_path
+
+  li class=current_class_for(:top)
+    = link_to 'Top projects', controller_path(scope: 'top')
+
+  li class=current_class_for(:recent)
+    = link_to 'Recently added', controller_path(scope: 'recent')
+
+  li class=current_class_for(:discussions)
+    = link_to 'Discussions', controller_path(scope: 'discussed')

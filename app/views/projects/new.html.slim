@@ -1,0 +1,26 @@
+h2.page-title New project
+p.lead.text-muted Are you sure you wan't to add it?
+
+.panel.panel-default
+  .panel-body
+    .media
+      .pull-left
+        = image_tag 'gh_logo.png', size: '60', class: 'img-rounded'
+
+      .media-body
+        h3.media-heading
+          a href=@gh_repo.html_url
+            = @gh_repo.full_name
+
+        p.no-margin
+          = @gh_repo.description
+          - if @gh_repo.homepage.present?
+            == " - #{link_to @gh_repo.homepage, @gh_repo.homepage}"
+
+= form_for @project, url: '/' do |f|
+  = f.hidden_field :full_name
+
+  .text-center
+    ul.list-inline
+      li: button.btn.btn-success type="submit" Sure i do!
+      li: a.btn.btn-default href=new_project_path Naah

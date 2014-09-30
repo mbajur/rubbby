@@ -1,0 +1,25 @@
+// @import 'bootstrap/variables';
+
+$grid-gutter-width: 30px;
+$container-large-desktop: ((900px + $grid-gutter-width));
+
+// Scaffolding
+$body-bg: #eee;
+$text-color: #333;
+$link-color: $text-color;
+
+// Typography
+$font-family-sans-serif: 'open sans';
+$headings-font-weight: 600;
+
+// Navbars
+$navbar-default-bg: #A33939;
+$navbar-height: 60px;
+$navbar-default-link-active-color: #FAF3F3;
+$navbar-default-link-hover-color: darken($navbar-default-bg, 7%);
+$navbar-default-link-color: darken($navbar-default-bg, 7%);
+$navbar-default-link-active-bg: transparent;
+$navbar-border-radius: 0;
+
+// Forms
+$input-color-placeholder: darken(#eee, 15%);

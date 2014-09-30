@@ -1,0 +1,62 @@
+doctype html
+html
+  head
+    title rubbby
+    link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet' type='text/css'
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+
+  body
+    nav.navbar.navbar-default
+      .container
+        .row
+          .col-lg-8.col-lg-offset-2.main-nav
+
+            ul.nav.navbar-nav
+              li class=('active' if url_for() == '/')
+                a href='/' All
+
+              li class=('active' if url_for() == '/gems')
+                a href=gems_path Gems
+
+              li class=('active' if url_for() == '/apps')
+                a href=apps_path Apps
+
+              li class=('active' if url_for() == '/tags')
+                a href=projects_path Tags
+
+            form.navbar-form.navbar-right
+              .form-group
+                input.form-control type="text" placeholder="Search"
+
+          .col-lg-2.navbar-user-widget
+            .media
+
+              - if user_signed_in?
+                img.pull-right.img-circle src=current_user.decorate.avatar_url(35)
+                .media-body.text-right
+                  a.navbar-user-widget-nickname mbajur
+                  br
+                  a.navbar-user-widget-signout href=destroy_user_session_path data-method="delete" Sign-out
+
+              - else
+                = link_to '/users/auth/github', class: 'pull-right' do
+                  = image_tag 'gh_logo.png', width: 35, class: 'img-circle'
+
+                .media-body.text-right
+                  a href='/users/auth/github'
+                    | Sign in with<br/>
+                    strong GitHub
+
+    .container
+      .row
+        .col-lg-2#sidebar-left
+          = yield :sidebar_left
+
+        .col-lg-8#content class=yield(:content_class)
+          = yield
+
+        .col-lg-2#sidebar-right
+          - if user_signed_in?
+            a.btn.btn-primary.btn-sm.pull-right href=new_project_path + Add project

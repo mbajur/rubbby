@@ -1,0 +1,1 @@
+json.extract! @project, :id, :name, :full_name, :description, :github_id, :homepage, :stargazers_count, :watchers_count, :forks_count, :subscribers_count, :parent_id, :source_id, :created_at, :updated_at

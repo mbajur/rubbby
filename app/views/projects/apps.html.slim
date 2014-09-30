@@ -1,0 +1,12 @@
+- content_for :sidebar_left do
+  = render_cell :scope_sidebar, :show, root_path: apps_path
+
+.page-heading.text-center
+  h1.page-title Applications
+  p.lead.text-muted There are #{@projects_count} apps on rubbby
+  hr
+
+- @projects.each do |project|
+  = render_cell :project, :list_show, project: project
+
+= paginate @projects

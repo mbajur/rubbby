@@ -1,0 +1,30 @@
+.navbar {
+  border: none;
+  margin-bottom: 0;
+}
+
+.navbar-nav {
+  font-size: 16px;
+}
+
+.main-nav {
+  background: #c54b4b;
+}
+
+.navbar-user-widget {
+  font-size: 13px;
+  padding-top: 10px;
+
+  a {
+    color: darken($navbar-default-bg, 15%);
+  }
+
+  .navbar-user-widget-nickname {
+    font-weight: bold;
+    color: $navbar-default-link-active-color;
+  }
+
+  .navbar-user-widget-signout {
+    font-size: 12px;
+  }
+}

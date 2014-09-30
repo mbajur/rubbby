@@ -1,0 +1,38 @@
+.page-heading.text-center
+  h1.page-title = @project.name
+  p.lead.text-muted = @project.description
+  hr
+
+p
+  strong Name:
+  = @project.name
+p
+  strong Full name:
+  = @project.full_name
+p
+  strong Description:
+  = @project.description
+p
+  strong Github:
+  = @project.github_id
+p
+  strong Homepage:
+  = @project.homepage
+p
+  strong Stargazers count:
+  = @project.stargazers_count
+p
+  strong Watchers count:
+  = @project.watchers_count
+p
+  strong Forks count:
+  = @project.forks_count
+p
+  strong Subscribers count:
+  = @project.subscribers_count
+p
+  strong Parent:
+  = @project.parent_id
+p
+  strong Source:
+  = @project.source_id
