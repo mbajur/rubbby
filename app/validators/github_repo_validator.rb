@@ -2,6 +2,7 @@ class GithubRepoValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
 
     return true if record.errors[attribute].any?
+    return true unless record.send("#{attribute}_changed?")
 
     user  = record.user
 
@@ -10,9 +11,9 @@ class GithubRepoValidator < ActiveModel::EachValidator
     gh = Octokit::Client.new(token: user.services.last.token)
 
     begin
-      repo = gh.repository(value)
+      gh.repository(value)
 
-    rescue Octokit::NotFound => e
+    rescue Octokit::NotFound
       record.errors[attribute] << (options[:message] || "does not exists")
 
     end
