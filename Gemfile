@@ -53,6 +53,9 @@ gem 'devise'
 gem 'omniauth'
 gem 'omniauth-github'
 
+# Bower for rails
+gem "bower-rails", "~> 0.8.3"
+
 group :development, :test do
   gem 'rspec-rails', '~> 3'
   gem 'database_cleaner'

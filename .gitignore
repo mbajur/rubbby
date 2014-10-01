@@ -36,3 +36,4 @@ build/
 /config/secrets.yml
 /log
 /config/deploy.rb
+/vendor/assets/

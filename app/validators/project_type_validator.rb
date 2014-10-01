@@ -7,7 +7,7 @@ class ProjectTypeValidator < ActiveModel::EachValidator
     values = values.uniq
 
     if values == [false]
-      record.errors[:base] << (options[:message] || "You need to select a project type")
+      record.errors[:base] << (options[:message] || "You need to select at least one a project type")
     end
 
   end

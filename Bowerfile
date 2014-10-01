@@ -1,0 +1,5 @@
+asset 'underscore'
+asset 'angular'
+asset 'restangular'
+asset 'angular-ui-select'
+asset 'selectize'

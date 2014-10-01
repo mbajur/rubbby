@@ -17,8 +17,6 @@ class Project < ActiveRecord::Base
   validates :rubygem_name, presence: true, rubygem_gem: true, if: :is_gem
 
   validates_with ProjectTypeValidator, attributes: [:is_gem, :is_app]
-  # validates_with GithubRepoValidator,  attributes: [:full_name]
-  # validates_with RubygemGemValidator,  attributes: [:rubygem_name], if: :is_gem
 
   def calculate_points
     watch_weight = 0.005

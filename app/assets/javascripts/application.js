@@ -10,7 +10,20 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+// Require basic js libs:
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
+//= require underscore/underscore-min
+//
+// Require bower components
+//= require angular/angular
+//= require restangular/dist/restangular.min
+//= require angular-ui-select/dist/select.min
+//
+// Require angular app itself:
+//= require ./application/rubbbyApp
+
+$(document).on('ready page:load', function() {
+  angular.bootstrap('body', ['rubbbyApp'])
+})

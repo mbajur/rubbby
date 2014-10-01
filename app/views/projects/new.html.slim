@@ -28,21 +28,34 @@
               label Is that a gem?
               br
               .checkbox.btn.btn-default: label
-                = f.check_box :is_gem
+                = f.check_box :is_gem, ng_model: 'project.isGem'
                 | Yes
 
             .col-xs-6.text-center
-              label Is that a project?
+              label Is that an app?
               br
               .checkbox.btn.btn-default: label
                 = f.check_box :is_app
                 | Yes
 
-        .form-group
+        .form-group ng-show="project.isGem"
           hr
           = f.label :rubygem_name, 'Rubygem name:'
           = f.text_field :rubygem_name, class: 'form-control input-lg text-center'
           p.help-block.text-center How is that gem called on <a href="http://rubygems.org">rubygems.org</a>?
+
+        .form-group
+          hr
+
+          ui-select ng-model="item.category" theme="selectize" ng-hide="newCategory"
+            ui-select-match placeholder="Select categories"
+              | {{ $select.selected.name }}
+
+            ui-select-choices repeat="category in categories"
+              | {{ category.name }}
+              i.text-muted< ng-show="category.status=='pending'"
+                | (pending)
+
         hr
 
         .text-center
