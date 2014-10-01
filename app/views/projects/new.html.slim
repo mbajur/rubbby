@@ -47,8 +47,9 @@
         .form-group
           hr
 
+          label Project tags:
           ui-select ng-model="item.category" theme="selectize" ng-hide="newCategory"
-            ui-select-match placeholder="Select categories"
+            ui-select-match placeholder="Select tags"
               | {{ $select.selected.name }}
 
             ui-select-choices repeat="category in categories"

@@ -5,6 +5,12 @@ Rails.application.routes.draw do
   get '/users/auth/:service/callback' => 'user_services#create'
   # resources :user_services, :only => [:create]
 
+  namespace :api do
+    namespace :v1 do
+      resources :tags
+    end
+  end
+
   get 'gems' => 'projects#gems', as: :gems
   get 'apps' => 'projects#apps', as: :apps
   get '/new' => 'projects#new', as: :new_project

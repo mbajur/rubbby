@@ -18,7 +18,7 @@
       li.no-dot title="Hottness"
         = @project.hottness
 
-      li #{pluralize @project.points, 'point'} and <a href="" class="link-underline">9 comments</a>
+      li #{pluralize @project.mini_points, 'point'} and <a href="" class="link-underline">9 comments</a>
       li title="Recent push"
         = @project.mini_time_ago(:github_pushed_at)
 

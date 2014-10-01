@@ -22,6 +22,10 @@ class ProjectDecorator < Draper::Decorator
     number + char.first
   end
 
+  def mini_points
+    h.number_to_human(object.points, units: :points, format: '%n%u')
+  end
+
   def type_label
     object.type.to_s.capitalize
   end

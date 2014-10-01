@@ -21,3 +21,9 @@
 
 en:
   hello: "Hello world"
+
+  points:
+    unit: ''
+    thousand:
+      one: "k"
+      other: "k"

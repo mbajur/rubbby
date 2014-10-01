@@ -2,6 +2,8 @@ class Project < ActiveRecord::Base
   include ActiveModel::Validations
 
   has_many :stats, class_name: 'Stats'
+  has_many :project_tags
+  has_many :tags, through: :project_tags
   belongs_to :user
 
   paginates_per 20
@@ -19,15 +21,17 @@ class Project < ActiveRecord::Base
   validates_with ProjectTypeValidator, attributes: [:is_gem, :is_app]
 
   def calculate_points
-    watch_weight = 0.005
-    fork_weight  = 0.003
-    star_weight  = 0.005
+    # watch_weight = 0.005
+    # fork_weight  = 0.003
+    # star_weight  = 0.005
 
-    points  = (watchers_count * watch_weight).round
-    points += (forks_count * fork_weight).round
-    points += (stargazers_count * star_weight).round
+    # points  = (watchers_count * watch_weight).round
+    # points += (forks_count * fork_weight).round
+    # points += (stargazers_count * star_weight).round
 
-    (points / 3).round
+    points  = stargazers_count
+    points += forks_count
+    points += subscribers_count
   end
 
   def calculate_hottness
