@@ -7,10 +7,9 @@ Rails.application.routes.draw do
 
   get 'gems' => 'projects#gems', as: :gems
   get 'apps' => 'projects#apps', as: :apps
-  get  '/new' => 'projects#new', as: :new_project
-  post '/new' => 'projects#new'
-  resources :projects, path: '/', only: [:index, :show, :create, :new] do
-
+  get '/new' => 'projects#new', as: :new_project
+  resources :projects, path: '/' do
+    get '/*full_name/edit' => 'projects#edit', on: :collection, as: :edit
     get '/*full_name' => 'projects#show', on: :collection, as: :show
   end
 end

@@ -27,6 +27,10 @@ module Rubbby
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    # Autoloag lib paths
     config.autoload_paths << Rails.root.join('lib')
+
+    # Autoload validators
+    config.autoload_paths << Rails.root.join('app', 'validators')
   end
 end

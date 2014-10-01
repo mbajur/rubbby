@@ -14,5 +14,10 @@ module Rubbby
       # with github
       class UserAllreadySignedIn < Exception; end
     end
+
+    module Rubygems
+      # If rubygems gem has not been found
+      class NotFound < Exception; end
+    end
   end
 end

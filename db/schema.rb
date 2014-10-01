@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140930060238) do
+ActiveRecord::Schema.define(version: 20141001074925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,9 +50,14 @@ ActiveRecord::Schema.define(version: 20140930060238) do
     t.boolean  "is_gem",            default: false
     t.boolean  "is_app",            default: false
     t.integer  "hottness",          default: 0
+    t.string   "rubygem_name"
+    t.integer  "user_id"
+    t.integer  "owner_id"
   end
 
+  add_index "projects", ["rubygem_name"], name: "index_projects_on_rubygem_name", unique: true, using: :btree
   add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree
+  add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
 
   create_table "stats", force: true do |t|
     t.integer  "project_id"

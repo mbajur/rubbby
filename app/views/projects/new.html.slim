@@ -1,26 +1,49 @@
-h2.page-title New project
-p.lead.text-muted Are you sure you wan't to add it?
+/- content_for :content_class, 'text-center'
 
-.panel.panel-default
-  .panel-body
-    .media
-      .pull-left
-        = image_tag 'gh_logo.png', size: '60', class: 'img-rounded'
+.text-center
+  h2.page-title New project
+  p.lead.text-muted Provide basic project info to add it to rubbby:
 
-      .media-body
-        h3.media-heading
-          a href=@gh_repo.html_url
-            = @gh_repo.full_name
+= form_for @project do |f|
+    .row
+      .col-xs-8.col-xs-offset-2
 
-        p.no-margin
-          = @gh_repo.description
-          - if @gh_repo.homepage.present?
-            == " - #{link_to @gh_repo.homepage, @gh_repo.homepage}"
+        - if @project.errors.any?
+          .alert.alert-danger
+            h4 There are some errors in the form:
+            ul
+              - @project.errors.full_messages.each do |message|
+                li = message
 
-= form_for @project, url: '/' do |f|
-  = f.hidden_field :full_name
+          hr
 
-  .text-center
-    ul.list-inline
-      li: button.btn.btn-success type="submit" Sure i do!
-      li: a.btn.btn-default href=new_project_path Naah
+        .form-group
+          = f.label :full_name, 'GitHub path:'
+          = f.text_field :full_name, class: 'form-control input-lg text-center', placeholder: 'owner/repo'
+          hr
+
+        .form-group
+          .row
+            .col-xs-6.text-center
+              label Is that a gem?
+              br
+              .checkbox.btn.btn-default: label
+                = f.check_box :is_gem
+                | Yes
+
+            .col-xs-6.text-center
+              label Is that a project?
+              br
+              .checkbox.btn.btn-default: label
+                = f.check_box :is_app
+                | Yes
+
+        .form-group
+          hr
+          = f.label :rubygem_name, 'Rubygem name:'
+          = f.text_field :rubygem_name, class: 'form-control input-lg text-center'
+          p.help-block.text-center How is that gem called on <a href="http://rubygems.org">rubygems.org</a>?
+        hr
+
+        .text-center
+          input.btn.btn-default type="submit" value="Add project"

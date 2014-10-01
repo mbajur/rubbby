@@ -45,10 +45,26 @@ gem 'cells'
 # Pagination
 gem 'kaminari'
 
+# RubyGems api
+gem 'gems'
+
 # Authentication
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-github'
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3'
+  gem 'database_cleaner'
+end
+
+group :test do
+  gem 'guard-rspec'
+  gem 'capybara'
+  gem 'webmock'
+  gem 'factory_girl'
+  gem 'factory_girl_rails', github: 'thoughtbot/factory_girl_rails'
+end
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

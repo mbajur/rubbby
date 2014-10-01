@@ -27,39 +27,18 @@ class ProjectsController < ApplicationController
   def show
   end
 
-  # GET  /projects/new
-  # POST /projects/new
   def new
     @project = Project.new
-
-    case request.method
-    when 'GET'
-      render 'new_github'
-
-    when 'POST'
-      project = Project.find_by(full_name: params[:full_name])
-
-      if project
-        redirect_to project, notice: "#{project.name} is already here, have a look"
-        return
-      end
-
-      gh_client = Octokit::Client.new(current_user.services.last.token)
-      @gh_repo  = gh_client.repository params[:full_name]
-
-      @project.full_name = @gh_repo.full_name
-
-      render 'new'
-    end
   end
 
   # GET /projects/1/edit
-  # def edit
-  # end
+  def edit
+  end
 
   # POST /projects
   def create
     @project = Project.new(project_params).decorate
+    @project.user = current_user
 
     respond_to do |format|
       if @project.save
@@ -96,7 +75,7 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:full_name)
+      params.require(:project).permit(:full_name, :is_gem, :is_app, :rubygem_name)
     end
 
     def apply_scope_filters

@@ -1,16 +1,24 @@
 class Project < ActiveRecord::Base
+  include ActiveModel::Validations
+
   has_many :stats, class_name: 'Stats'
+  belongs_to :user
 
   paginates_per 20
 
   # default_scope { select('*, hottness(projects.*) AS hottness') }
-  scope :hot,    -> { order(hottness: :desc).where('hottness > ?', 0) }
+  scope :hot,    -> { order(hottness: :desc) }
   scope :top,    -> { order points: :desc }
   scope :recent, -> { order created_at: :desc }
   scope :gems,   -> { where is_gem: true }
   scope :apps,   -> { where is_app: true }
 
-  validates :full_name, presence: true, uniqueness: true
+  validates :full_name, presence: true, uniqueness: true, format: { with: /.+\/.+/ }, github_repo: true
+  validates :rubygem_name, presence: true, rubygem_gem: true, if: :is_gem
+
+  validates_with ProjectTypeValidator, attributes: [:is_gem, :is_app]
+  # validates_with GithubRepoValidator,  attributes: [:full_name]
+  # validates_with RubygemGemValidator,  attributes: [:rubygem_name], if: :is_gem
 
   def calculate_points
     watch_weight = 0.005
