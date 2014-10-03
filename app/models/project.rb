@@ -15,15 +15,16 @@ class Project < ActiveRecord::Base
   scope :gems,   -> { where is_gem: true }
   scope :apps,   -> { where is_app: true }
 
-  validates :full_name, presence: true, uniqueness: true, format: { with: /.+\/.+/ }, github_repo: true
+  validates_format_of :full_name, with: /.+\/.+/
+  validates :full_name, presence: true, uniqueness: true, github_repo: true
   validates :rubygem_name, presence: true, rubygem_gem: true, if: :is_gem
 
   validates_with ProjectTypeValidator, attributes: [:is_gem, :is_app]
 
   def calculate_points
-    points  = stargazers_count
-    points += forks_count
-    points += subscribers_count
+    stargazers_count + \
+    forks_count + \
+    subscribers_count
   end
 
   def calculate_hottness
@@ -38,7 +39,7 @@ class Project < ActiveRecord::Base
     last_sum   += period_stats.last.forks_count
 
     delta = last_sum - first_sum
-    self.update_attribute(:hottness, delta)
+    update_attribute(:hottness, delta)
   end
 
   def fetch_data
@@ -49,18 +50,18 @@ class Project < ActiveRecord::Base
   end
 
   def touch_points
-    self.update_attribute(:points, calculate_points)
+    update_attribute(:points, calculate_points)
   end
 
   def save_project_stats(opts = {})
-    stats_for_today = self.stats.today
+    stats_for_today = stats.today
 
     # If there are any stats saved for today,
     # do not create a new ones, just udate the existing ones.
     if stats_for_today.any?
       stats_for_today.last.update_attributes(opts)
     else
-      self.stats.create(opts)
+      stats.create(opts)
     end
   end
 
@@ -73,61 +74,65 @@ class Project < ActiveRecord::Base
 
   private
 
-    def previous_stats
-      stats.where('created_at < ?', DateTime.now.beginning_of_day).last
+  def previous_stats
+    stats.where('created_at < ?', DateTime.now.beginning_of_day).last
+  end
+
+  def fetch_github_data
+    desired_params = %w(name description homepage stargazers_count
+                        watchers_count forks_count subscribers_count)
+
+    client = Octokit::Client.new \
+      client_id:     Rails.application.secrets.github_key,
+      client_secret: Rails.application.secrets.github_secret
+
+    repo = client.repository full_name
+
+    params = {}
+    desired_params.each do |param|
+      params[param.to_sym] = repo.send(param)
     end
 
-    def fetch_github_data
-      desired_params = %w(name description homepage stargazers_count
-                          watchers_count forks_count subscribers_count)
+    params[:github_id]         = repo.id
+    params[:github_created_at] = repo.created_at
+    params[:github_pushed_at]  = repo.pushed_at
 
-      client = Octokit::Client.new \
-        client_id:     Rails.application.secrets.github_key,
-        client_secret: Rails.application.secrets.github_secret
+    save_project_stats \
+      params.slice(:stargazers_count, :subscribers_count, :forks_count)
 
-      repo = client.repository full_name
+    update_attributes params
+  end
 
-      params = {}
-      desired_params.each do |param|
-        params[param.to_sym] = repo.send(param)
-      end
+  def fetch_rubygem_data
+    return false if rubygem_name.blank?
 
-      params[:github_id]         = repo.id
-      params[:github_created_at] = repo.created_at
-      params[:github_pushed_at]  = repo.pushed_at
+    # Get gem info
+    gem = Gems.info rubygem_name
 
-      save_project_stats(params.slice(:stargazers_count, :subscribers_count, :forks_count))
+    # Calculate delta
+    delta = calculate_delta
 
-      self.update_attributes params
+    params = {
+      rubygem_downloads_count: gem['downloads'],
+      rubygem_downloads_count_delta: delta
+    }
+    save_project_stats(params)
+  end
+
+  # Calculates a delta of current downloads_count
+  # and downloads_count of previous fetch.
+  #
+  # If there is no any previous fetch, we need to
+  # return 0 to prevent unfair delta rates (for
+  # 20134567 total downloads and no previous fetch,
+  # the delta would be 20134567, it's just wrong.)
+  #
+  def calculate_delta
+    case previous_stats.present?
+    when true
+      gem['downloads'] - previous_stats.rubygem_downloads_count
+    when false
+      0
     end
-
-    def fetch_rubygem_data
-      return false if rubygem_name.blank?
-
-      # Get gem info
-      gem = Gems.info rubygem_name
-
-      # Calculate a delta of current downloads_count
-      # and downloads_count of previous fetch.
-      #
-      # If there is no any previous fetch, we need to
-      # return 0 to prevent unfair delta rates (for
-      # 20134567 total downloads and no previous fetch,
-      # the delta would be 20134567, it's just wrong.)
-      #
-      delta = case previous_stats.present?
-        when true
-
-          gem['downloads'] - previous_stats.rubygem_downloads_count
-        when false
-          0
-      end
-
-      params = {
-        rubygem_downloads_count: gem['downloads'],
-        rubygem_downloads_count_delta: delta
-      }
-      save_project_stats(params)
-    end
-
+  end
 end
