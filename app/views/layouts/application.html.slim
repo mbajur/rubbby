@@ -59,5 +59,8 @@ html
           = yield
 
         .col-lg-2#sidebar-right
-          - if user_signed_in?
-            a.btn.btn-primary.btn-sm.pull-right href=new_project_path + Add project
+          - if content_for?(:sidebar_right)
+            = yield :sidebar_right
+          - else
+            - if user_signed_in?
+              a.btn.btn-primary.btn-sm.pull-right href=new_project_path + Add project

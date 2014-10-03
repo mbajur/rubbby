@@ -1,42 +1,66 @@
 = form_for @project do |f|
-  - if @project.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
-      ul
-        - @project.errors.full_messages.each do |message|
-          li = message
+  .row ng-controller="ProjectFormCtrl"
+    .col-xs-8.col-xs-offset-2
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :full_name
-    = f.text_field :full_name
-  .field
-    = f.label :description
-    = f.text_area :description
-  .field
-    = f.label :github_id
-    = f.number_field :github_id
-  .field
-    = f.label :homepage
-    = f.text_field :homepage
-  .field
-    = f.label :stargazers_count
-    = f.number_field :stargazers_count
-  .field
-    = f.label :watchers_count
-    = f.number_field :watchers_count
-  .field
-    = f.label :forks_count
-    = f.number_field :forks_count
-  .field
-    = f.label :subscribers_count
-    = f.number_field :subscribers_count
-  .field
-    = f.label :parent_id
-    = f.number_field :parent_id
-  .field
-    = f.label :source_id
-    = f.number_field :source_id
-  .actions = f.submit 'Save'
+      / Pass @project params to angular controller
+      div ng-init="project.isGem=#{@project.is_gem}"
+      div ng-init="project.isApp=#{@project.is_app}"
+      div ng-init="setTags([#{@project.tag_ids.join(',')}])"
+
+      - if @project.errors.any?
+        .alert.alert-danger
+          h4 There are some errors in the form:
+          ul
+            - @project.errors.full_messages.each do |message|
+              li = message
+
+        hr
+
+      .form-group
+        = f.label :full_name, 'GitHub path:'
+        = f.text_field :full_name, class: 'form-control input-lg text-center', placeholder: 'owner/repo'
+        hr
+
+      .form-group
+        .row
+          .col-xs-6.text-center
+            label Is that a gem?
+            br
+            .checkbox.btn.btn-default: label
+              = f.check_box :is_gem, ng_model: 'project.isGem'
+              | Yes
+
+          .col-xs-6.text-center
+            label Is that an app?
+            br
+            .checkbox.btn.btn-default: label
+              = f.check_box :is_app
+              | Yes
+
+      .form-group ng-show="project.isGem"
+        hr
+        = f.label :rubygem_name, 'Rubygem name:'
+        = f.text_field :rubygem_name, class: 'form-control input-lg text-center'
+        p.help-block.text-center How is that gem called on <a href="http://rubygems.org">rubygems.org</a>?
+
+      .form-group
+        hr
+
+        label Project tags:
+        ui-select multiple="" ng-model="item.tags" theme="select2"
+          ui-select-match placeholder="Select tags"
+            | {{ $item.name }}
+
+          ui-select-choices repeat="tag in tags | filter: {name: $select.search}"
+            strong
+              | {{ tag.name }}
+              br
+            small.text-muted
+              | {{ tag.description }}
+
+        input.hidden type="text" name="project[tag_ids][]" ng-repeat="tag in item.tags" ng-model="tag.id"
+
+      hr
+
+      .text-center
+        input.btn.btn-default type="submit" value="Save project"

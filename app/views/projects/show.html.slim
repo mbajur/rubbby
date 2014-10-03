@@ -1,38 +1,44 @@
+- content_for :sidebar_left do
+  ul.list-unstyled.text-right.project-stats
+    li.stats-element class=@project.hottness_score_class
+      .stats-number
+        i.glyphicon.glyphicon-fire>
+        = @project.hottness
+      .stats-label Hottness
+    li.with-separator
+      .stats-number = @project.mini_points
+      .stats-label Points
+    li
+      .stats-number= @project.mini_time_ago(:github_pushed_at)
+      .stats-label Recent push
+    li
+      .stats-number 12
+      .stats-label Releases
+
+    li.active
+      .stats-number 12
+      .stats-label Comments
+
+- content_for :sidebar_right do
+  / Pilled version
+  /
+  / ul.nav.nav-pills.nav-stacked
+  /   li.active: a Overall
+  /   li: a GitHub
+  /   li: a Rubygems
+  /   li: a Comments
+
+  ul.list-unstyled.nav-general
+    li.active: a Overall
+    li: a GitHub
+    li: a Rubygems
+    li: a Discussions
+
 .page-heading.text-center
   h1.page-title = @project.name
   p.lead.text-muted = @project.description
-  hr
 
-p
-  strong Name:
-  = @project.name
-p
-  strong Full name:
-  = @project.full_name
-p
-  strong Description:
-  = @project.description
-p
-  strong Github:
-  = @project.github_id
-p
-  strong Homepage:
-  = @project.homepage
-p
-  strong Stargazers count:
-  = @project.stargazers_count
-p
-  strong Watchers count:
-  = @project.watchers_count
-p
-  strong Forks count:
-  = @project.forks_count
-p
-  strong Subscribers count:
-  = @project.subscribers_count
-p
-  strong Parent:
-  = @project.parent_id
-p
-  strong Source:
-  = @project.source_id
+hr
+
+.form-group
+  textarea.form-control placeholder="Write your comment to #{@project.name} here..."

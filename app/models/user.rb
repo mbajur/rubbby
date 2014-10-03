@@ -6,4 +6,11 @@ class User < ActiveRecord::Base
          :omniauthable
 
   has_many :services, class_name: 'UserService', dependent: :destroy
+
+  def self.new_for_oauth(opts = {})
+    user = opts.slice(:email, :nickname, :name)
+    user[:password] = SecureRandom.hex(10)
+
+    User.new user
+  end
 end

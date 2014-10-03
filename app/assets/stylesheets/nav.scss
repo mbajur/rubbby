@@ -1,0 +1,12 @@
+ul.nav-general > li {
+  padding-bottom: 7px;
+
+  &> a {
+    color: lighten($gray-light, 20%);
+  }
+}
+
+ul.nav-general > li.active > a {
+  font-weight: 600;
+  color: $text-color;
+}

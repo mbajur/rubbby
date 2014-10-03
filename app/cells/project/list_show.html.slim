@@ -15,7 +15,7 @@
       p = @project.description
 
     ul.list-inline.list-inline-dotted.media-meta
-      li.no-dot title="Hottness"
+      li.no-dot title="Hottness" class=@project.hottness_score_class
         i.glyphicon.glyphicon-fire>
         = @project.hottness
 
@@ -23,4 +23,5 @@
       li title="Recent push"
         = @project.mini_time_ago(:github_pushed_at)
 
-      li.pull-right.no-dot Productivity
+      - @tags.each do |tag|
+        li.pull-right.no-dot = link_to tag, tag.path

@@ -25,6 +25,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1
   def show
+    @project = @project.decorate
   end
 
   def new
@@ -40,17 +41,11 @@ class ProjectsController < ApplicationController
     @project = Project.new(project_params).decorate
     @project.user = current_user
 
-    respond_to do |format|
-      if @project.save
-        @project.fetch_github_data
-        @project.touch_points
-
-        format.html { redirect_to @project.path, notice: 'Project was successfully created.' }
-        format.json { render :show, status: :created, location: @project }
-      else
-        format.html { render :new }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
-      end
+    if @project.save
+      @project.fetch_data
+      redirect_to @project.path, notice: 'Project was successfully created.'
+    else
+      render :new
     end
   end
 
@@ -68,6 +63,7 @@ class ProjectsController < ApplicationController
   # end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_project
       @project = Project.find_by(full_name: params[:full_name])
@@ -75,7 +71,7 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:full_name, :is_gem, :is_app, :rubygem_name)
+      params.require(:project).permit(:full_name, :is_gem, :is_app, :rubygem_name, :tag_ids => [])
     end
 
     def apply_scope_filters

@@ -1,63 +1,7 @@
-/- content_for :content_class, 'text-center'
-
 .text-center
   h2.page-title New project
   p.lead.text-muted Provide basic project info to add it to rubbby:
 
-= form_for @project do |f|
-    .row
-      .col-xs-8.col-xs-offset-2
+hr
 
-        - if @project.errors.any?
-          .alert.alert-danger
-            h4 There are some errors in the form:
-            ul
-              - @project.errors.full_messages.each do |message|
-                li = message
-
-          hr
-
-        .form-group
-          = f.label :full_name, 'GitHub path:'
-          = f.text_field :full_name, class: 'form-control input-lg text-center', placeholder: 'owner/repo'
-          hr
-
-        .form-group
-          .row
-            .col-xs-6.text-center
-              label Is that a gem?
-              br
-              .checkbox.btn.btn-default: label
-                = f.check_box :is_gem, ng_model: 'project.isGem'
-                | Yes
-
-            .col-xs-6.text-center
-              label Is that an app?
-              br
-              .checkbox.btn.btn-default: label
-                = f.check_box :is_app
-                | Yes
-
-        .form-group ng-show="project.isGem"
-          hr
-          = f.label :rubygem_name, 'Rubygem name:'
-          = f.text_field :rubygem_name, class: 'form-control input-lg text-center'
-          p.help-block.text-center How is that gem called on <a href="http://rubygems.org">rubygems.org</a>?
-
-        .form-group
-          hr
-
-          label Project tags:
-          ui-select ng-model="item.category" theme="selectize" ng-hide="newCategory"
-            ui-select-match placeholder="Select tags"
-              | {{ $select.selected.name }}
-
-            ui-select-choices repeat="category in categories"
-              | {{ category.name }}
-              i.text-muted< ng-show="category.status=='pending'"
-                | (pending)
-
-        hr
-
-        .text-center
-          input.btn.btn-default type="submit" value="Add project"
+== render 'form'

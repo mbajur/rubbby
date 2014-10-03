@@ -10,34 +10,31 @@ class UserServicesController < ApplicationController
 
     fail Rubbby::Exceptions::OAuth::NoRequestEnvVarFound unless omniauth
     fail Rubbby::Exceptions::OAuth::NoServiceParam       unless params[:service]
+    fail Rubbby::Exceptions::OAuth::UserAllreadySignedIn if user_signed_in?
 
     if service_route == 'github'
-      email    = omniauth['info']['email']
-      nickname = omniauth['info']['nickname']
-      name     = omniauth['info']['name']
-      uid      = omniauth['uid']
-      token    = omniauth['credentials']['token']
-      provider = omniauth['provider']
-
-      fail Rubbby::Exceptions::OAuth::UserAllreadySignedIn if user_signed_in?
-
-      auth = UserService.find_by_provider_and_uid(provider, uid)
-      unless auth
-        user = User.where(email: email)
-
-        user = (user.any?) ? user : User.new(email: email, password: SecureRandom.hex(10), nickname: nickname, name: name)
-        user.services.build(user: user, uid: uid, token: token, provider: provider)
-        user.save!
-
-        auth = user.services.last
-      end
-
-      flash[:notice] = 'Signed in successfully via ' + provider.capitalize + '.'
-      sign_in_and_redirect(:user, auth.user)
-
+      auth = create_for_github(omniauth)
     else
       fail Rubbby::Exceptions::OAuth::UnknownProvider
     end
+
+    flash[:notice] = "Signed in successfully via #{service_route.capitalize}."
+    sign_in_and_redirect(:user, auth.user)
   end
+
+  private
+
+    def create_for_github(omniauth)
+      oauth_user = {
+        email:    omniauth['info']['email'],
+        nickname: omniauth['info']['nickname'],
+        name:     omniauth['info']['name'],
+        uid:      omniauth['uid'],
+        token:    omniauth['credentials']['token'],
+        provider: omniauth['provider']
+      }
+
+      auth = UserService.find_or_create_for(:github, oauth_user)
+    end
 
 end

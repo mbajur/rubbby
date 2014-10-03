@@ -37,3 +37,4 @@ build/
 /log
 /config/deploy.rb
 /vendor/assets/
+test.rb

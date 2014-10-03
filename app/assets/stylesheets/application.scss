@@ -10,19 +10,23 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require selectize/dist/css/selectize.bootstrap3
  *= require angular-ui-select/dist/select.min
+ *= require select2/select2
  *= require_self
  */
 
 @import "bootstrap-variables";
 @import "bootstrap-custom";
 
-@import 'media.scss';
-@import 'navbar.scss';
-@import 'list.scss';
-@import 'scaffolding.scss';
-@import 'label.scss';
+@import "media.scss";
+@import "nav.scss";
+@import "navbar.scss";
+@import "list.scss";
+@import "scaffolding.scss";
+@import "label.scss";
+@import "stats.scss";
+
+@import "vendor/select2.bootstrap3.scss";
 
 /* Overall stuff */
 #sidebar-left, #content {
@@ -37,23 +41,46 @@
 }
 
 #sidebar-left {
-  ul > li {
-  	padding-bottom: 7px;
+  ul.project-stats {
+    margin-right: 10px;
 
-  	&> a {
-  	  color: lighten($gray-light, 20%);
-  	}
-  }
-
-  ul > li.active > a {
-  	font-weight: 600;
-  	color: $text-color;
+    li {
+      padding-bottom: 7px;
+    }
   }
 }
 
 #sidebar-right {
   text-align: right;
   padding-top: 20px;
+
+  .nav-general {
+    text-align: left;
+    margin-left: 10px;
+  }
+
+  .nav-pills {
+    text-align: left;
+    margin-left: -15px;
+  }
+
+  .nav-pills > li > a:hover,
+  .nav-pills > li > a:focus {
+    background-color: #ddd;
+  }
+
+  .nav-pills > li.active > a,
+  .nav-pills > li.active > a:hover,
+  .nav-pills > li.active > a:focus {
+    background-color: #fff;
+    color: $gray;
+  }
+
+  .nav-pills > li > a {
+    border-radius: 0 4px 4px 0;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
 }
 
 .page-title {
