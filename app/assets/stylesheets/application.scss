@@ -12,6 +12,7 @@
  *
  *= require angular-ui-select/dist/select.min
  *= require select2/select2
+ *= require nvd3/nv.d3.min
  *= require_self
  */
 
@@ -27,6 +28,7 @@
 @import "stats.scss";
 
 @import "vendor/select2.bootstrap3.scss";
+
 
 /* Overall stuff */
 #sidebar-left, #content {
@@ -85,6 +87,13 @@
 
 .page-title {
   margin-top: 0;
+}
+
+.page-title-section {
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #999;
+  font-weight: 200;
 }
 
 .no-margin {

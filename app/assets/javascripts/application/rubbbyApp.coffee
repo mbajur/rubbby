@@ -4,6 +4,7 @@
 rubbbyApp = angular.module "rubbbyApp", [
   'restangular'
   'ui.select'
+  'nvd3'
 
   'rubbbyApp.controllers'
 ]

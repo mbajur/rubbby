@@ -3,21 +3,37 @@
   width: 100%;
   padding: 0;
   margin-bottom: 20px;
-  border: 1px solid #eee;
-  border-width: 1px 0;
 
   li {
-    text-align: center;
     display: table-cell;
     width: 1%;
     padding: 0;
-    padding-top: 20px;
-    padding-bottom: 20px;
   }
 
   li.with-separator {
     border-right: 1px solid #eee;
   }
+}
+
+.stats-chart {
+  position: relative;
+}
+
+.stats-chart-number {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  text-align: center;
+  display: block;
+  line-height: 70px;
+  font-size: 15px;
+}
+
+.stats-total-count {
+  border-top: 1px solid #eee;
+  font-size: 12px;
+  padding-top: 5px;
+  color: #ddd;
 }
 
 .stats-element {
@@ -35,13 +51,24 @@
 }
 
 .stats-number {
-  font-size: 25px;
   font-weight: 600;
-  margin-bottom: -2px;
+  margin-bottom: 2px;
 
   .glyphicon {
     font-size: 70%;
   }
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+h3.stats-number {
+  font-size: 25px;
+}
+
+h4.stats-number {
+  font-size: 15px;
 }
 
 .stats-label {

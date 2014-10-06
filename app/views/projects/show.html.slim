@@ -20,13 +20,6 @@
       .stats-label Comments
 
 - content_for :sidebar_right do
-  / Pilled version
-  /
-  / ul.nav.nav-pills.nav-stacked
-  /   li.active: a Overall
-  /   li: a GitHub
-  /   li: a Rubygems
-  /   li: a Comments
 
   ul.list-unstyled.nav-general
     li.active: a Overall
@@ -34,11 +27,53 @@
     li: a Rubygems
     li: a Discussions
 
-.page-heading.text-center
-  h1.page-title = @project.name
-  p.lead.text-muted = @project.description
+/ Content
 
-hr
+div ng-controller="ProjectShowCtrl"
+  .page-heading.text-center
+    h1.page-title = @project.name
+    p.lead.text-muted = @project.description
 
-.form-group
-  textarea.form-control placeholder="Write your comment to #{@project.name} here..."
+    ul.list-inline
+      - @project.tags.decorate.each do |tag|
+        li= link_to tag.path, class: 'label label-tag' do
+          span
+            = tag
+            span.badge 12
+
+  hr
+
+  h4.page-title-section This month
+  ul.list-unstyled.stats
+    li.stats-element
+      .media
+        .pull-left.stats-chart
+          .stats-chart-number.text-success +8%
+          nvd3 options="chartOpts" data="[{y: 8, color: 'green'}, {y: 92, color: '#eee'}]"
+        .media-body
+          h3.stats-number.text-success 18
+          .stats-label Commits
+          .stats-total-count 387 total
+
+    li.stats-element
+      .media
+        .pull-left.stats-chart
+          .stats-chart-number.text-success +48%
+          nvd3 options="chartOpts" data="[{y: 48, color: 'green'}, {y: 52, color: '#eee'}]"
+        .media-body
+          h3.stats-number.text-success 40
+          .stats-label Points
+          .stats-total-count 32 total
+
+    li.stats-element
+      .media
+        .pull-left.stats-chart
+          .stats-chart-number.text-danger -80%
+          nvd3 options="chartOpts" data="[{y: 80, color: '#c54b4b'}, {y: 20, color: '#eee'}]"
+        .media-body
+          h3.stats-number.text-danger 12k
+          .stats-label Downloads
+          .stats-total-count 187k total
+
+  .form-group
+    textarea.form-control placeholder="Write your comment to #{@project.name} here..."

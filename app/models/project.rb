@@ -110,7 +110,7 @@ class Project < ActiveRecord::Base
     gem = Gems.info rubygem_name
 
     # Calculate delta
-    delta = calculate_delta
+    delta = calculate_delta(gem['downloads'])
 
     params = {
       rubygem_downloads_count: gem['downloads'],
@@ -127,10 +127,10 @@ class Project < ActiveRecord::Base
   # 20134567 total downloads and no previous fetch,
   # the delta would be 20134567, it's just wrong.)
   #
-  def calculate_delta
+  def calculate_delta(gem_downloads)
     case previous_stats.present?
     when true
-      gem['downloads'] - previous_stats.rubygem_downloads_count
+      gem_downloads - previous_stats.rubygem_downloads_count
     when false
       0
     end

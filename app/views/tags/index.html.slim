@@ -1,0 +1,19 @@
+- content_for :sidebar_left do
+  = render_cell :scope_sidebar, :show, root_path: tags_path
+
+- content_for :sidebar_right do
+  a.btn.btn-primary.btn-sm.pull-right href=new_tag_path + Add tag
+
+.page-heading.text-center
+  h1.page-title Tags
+  p.lead.text-muted There are #{@tags_count} tags on rubbby
+  hr
+
+ul.list-inline
+  - @tags.decorate.each do |tag|
+    li= link_to tag.path, class: 'label label-tag' do
+      span
+        = tag
+        span.badge = tag.projects_count
+
+= paginate @tags

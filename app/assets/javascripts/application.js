@@ -20,6 +20,9 @@
 //= require angular/angular
 //= require restangular/dist/restangular.min
 //= require angular-ui-select/dist/select.min
+//= require d3/d3.min
+//= require nvd3/nv.d3.min
+//= require angular-nvd3/dist/angular-nvd3.min
 //
 // Require angular app itself:
 //= require ./application/rubbbyApp
