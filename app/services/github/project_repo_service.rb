@@ -17,7 +17,7 @@ module Github
     # Saves repository data and repo stats data for
     # given project
     #
-    def save_data
+    def sync
       @project.save_project_stats build_stats_params
       @project.update_attributes  build_project_params
     end

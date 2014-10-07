@@ -30,13 +30,13 @@ class Project < ActiveRecord::Base
   def calculate_hottness
     period_stats = stats.where('created_at > ?', DateTime.now - 2.days)
 
-    first_sum   = period_stats.first.stargazers_count
-    first_sum  += period_stats.first.subscribers_count
-    first_sum  += period_stats.first.forks_count
+    first_sum  = period_stats.first.stargazers_count
+    first_sum += period_stats.first.subscribers_count
+    first_sum += period_stats.first.forks_count
 
-    last_sum    = period_stats.last.stargazers_count
-    last_sum   += period_stats.last.subscribers_count
-    last_sum   += period_stats.last.forks_count
+    last_sum   = period_stats.last.stargazers_count
+    last_sum  += period_stats.last.subscribers_count
+    last_sum  += period_stats.last.forks_count
 
     delta = last_sum - first_sum
     update_attribute(:hottness, delta)
@@ -93,48 +93,19 @@ class Project < ActiveRecord::Base
     gains
   end
 
-
+  def gem_downloads
+    stats.last.try(:rubygem_downloads_count) || 0
+  end
 
   private
 
-  def previous_stats
-    stats.where('created_at < ?', DateTime.now.beginning_of_day).last
-  end
-
   def fetch_github_data
-    Github::ProjectRepoService.new(self).save_data
+    Github::ProjectRepoService.new(self).sync
   end
 
   def fetch_rubygem_data
-    return false if rubygem_name.blank?
+    return false unless rubygem_name.present?
 
-    # Get gem info
-    gem = Gems.info rubygem_name
-
-    # Calculate delta
-    delta = calculate_delta gem['downloads']
-
-    params = {
-      rubygem_downloads_count: gem['downloads'],
-      rubygem_downloads_count_delta: delta
-    }
-    save_project_stats(params)
-  end
-
-  # Calculates a delta of current downloads_count
-  # and downloads_count of previous fetch.
-  #
-  # If there is no any previous fetch, we need to
-  # return 0 to prevent unfair delta rates (for
-  # 20134567 total downloads and no previous fetch,
-  # the delta would be 20134567, it's just wrong.)
-  #
-  def calculate_delta(gem_downloads)
-    case previous_stats.present?
-    when true
-      gem_downloads - previous_stats.rubygem_downloads_count
-    when false
-      0
-    end
+    Rubygems::ProjectGemService.new(self).sync
   end
 end
