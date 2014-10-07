@@ -36,6 +36,10 @@ class ProjectDecorator < Draper::Decorator
     h.number_to_human(object.points, units: :points, format: '%n%u')
   end
 
+  def mini_downloads
+    h.number_to_human(object.downloads, units: :points, format: '%n%u')
+  end
+
   # Converts project type to capitalized label
   #
   # @return [String]
@@ -48,7 +52,7 @@ class ProjectDecorator < Draper::Decorator
   # project's hottness score.
   #
   # @todo I don't yet know what point amounts are hot
-  #       so we need to adjust it a bit in a future.
+  #       so we need to adjust it a bit in the future.
   #
   # @return [String]
   #
@@ -57,6 +61,13 @@ class ProjectDecorator < Draper::Decorator
       when 10..24  then 'text-warning'
       when 25..Inf then 'text-danger'
     end
+  end
+
+  def percentage_gain(attr)
+    gain = object.percentage_gain_this_month[attr.to_sym] || 0
+
+    gain = (gain > 0) ? "+#{gain}" : gain
+    gain.to_s << '%'
   end
 
   private

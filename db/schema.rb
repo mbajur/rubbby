@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141003115020) do
+ActiveRecord::Schema.define(version: 20141007125859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20141003115020) do
     t.datetime "updated_at"
     t.integer  "rubygem_downloads_count",       default: 0
     t.integer  "rubygem_downloads_count_delta", default: 0
+    t.integer  "points",                        default: 0
   end
 
   add_index "stats", ["project_id"], name: "index_stats_on_project_id", using: :btree

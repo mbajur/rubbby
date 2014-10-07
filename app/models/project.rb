@@ -72,6 +72,29 @@ class Project < ActiveRecord::Base
     type
   end
 
+  def points_this_month
+    s = stats.this_month
+    s.last.points - s.first.points
+  end
+
+  def downloads
+    stats.last.rubygem_downloads_count
+  end
+
+  def percentage_gain_this_month
+    gains = {}
+    %w(
+      stargazers_count rubygem_downloads_count subscribers_count
+      forks_count
+    ).each do |key|
+      gains[key.to_sym] = stats.percentage_gain_this_month(key.to_sym)
+    end
+
+    gains
+  end
+
+
+
   private
 
   def previous_stats
@@ -110,7 +133,7 @@ class Project < ActiveRecord::Base
     gem = Gems.info rubygem_name
 
     # Calculate delta
-    delta = calculate_delta(gem['downloads'])
+    delta = calculate_delta gem['downloads']
 
     params = {
       rubygem_downloads_count: gem['downloads'],

@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :project do
-    full_name 'rails/rails'
+    sequence(:full_name) { |n| "rails/rails#{n}" }
     is_gem true
-    rubygem_name 'rails'
+    sequence(:rubygem_name) { |n| "rails#{n}" }
 
     user
   end
