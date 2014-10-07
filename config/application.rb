@@ -30,7 +30,8 @@ module Rubbby
     # Autoloag lib paths
     config.autoload_paths << Rails.root.join('lib')
 
-    # Autoload validators
+    # Autoload additional layers
     config.autoload_paths << Rails.root.join('app', 'validators')
+    config.autoload_paths << Rails.root.join('app', 'services')
   end
 end

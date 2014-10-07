@@ -102,28 +102,7 @@ class Project < ActiveRecord::Base
   end
 
   def fetch_github_data
-    desired_params = %w(name description homepage stargazers_count
-                        watchers_count forks_count subscribers_count)
-
-    client = Octokit::Client.new \
-      client_id:     Rails.application.secrets.github_key,
-      client_secret: Rails.application.secrets.github_secret
-
-    repo = client.repository full_name
-
-    params = {}
-    desired_params.each do |param|
-      params[param.to_sym] = repo.send(param)
-    end
-
-    params[:github_id]         = repo.id
-    params[:github_created_at] = repo.created_at
-    params[:github_pushed_at]  = repo.pushed_at
-
-    save_project_stats \
-      params.slice(:stargazers_count, :subscribers_count, :forks_count)
-
-    update_attributes params
+    Github::ProjectRepoService.new(self).save_data
   end
 
   def fetch_rubygem_data
