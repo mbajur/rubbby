@@ -109,6 +109,7 @@ GEM
     hike (1.2.3)
     hitimes (1.2.2)
     i18n (0.6.11)
+    interactor (3.0.1)
     jquery-rails (3.1.2)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
@@ -287,6 +288,7 @@ DEPENDENCIES
   friendly_id
   gems
   guard-rspec
+  interactor
   jquery-rails
   kaminari
   octokit (~> 3.0)
